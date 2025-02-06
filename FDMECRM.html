@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filhos de Maria</title>
+    <style>
+        /* Estilos Gerais */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+
+        /* Cabeçalho */
+        header {
+            background-color: #0077b6;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        header img {
+            width: 120px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        /* Menu Mobile */
+        #menuButton {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #menu {
+            width: 250px;
+            height: 100%;
+            background-color: #0077b6;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            transition: left 0.3s;
+        }
+
+        #menu.open {
+            left: 0;
+        }
+
+        #menu ul {
+            list-style: none;
+            padding: 20px;
+        }
+
+        #menu ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px 0;
+        }
+
+        /* Seções */
+        .section {
+            margin: 20px auto;
+            max-width: 800px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #0077b6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+        }
+
+        #stories iframe {
+            height: 600px;
+        }
+
+        audio {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        /* Tela de Login */
+        #login {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1001;
+        }
+
+        #loginForm {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #loginForm input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #loginForm button {
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* CRM */
+        #crm {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .aniversariante {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .aniversariante li {
+            padding: 5px;
+            background-color: #e3f2fd;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Mobile -->
+    <button id="menuButton" onclick="toggleMenu()">☰</button>
+    <div id="menu">
+        <ul>
+            <li><a href="#palavra">Palavra do Dia</a></li>
+            <li><a href="#musica">Música</a></li>
+            <li><a href="#videos">Vídeos</a></li>
+            <li><a href="#oracao">Pedido de Oração</a></li>
+            <li><a href="#stories">Instagram</a></li>
+            <li><a href="#crmLink">CRM</a></li>
+        </ul>
+    </div>
+
+    <!-- Tela de Login -->
+    <div id="login">
+        <form id="loginForm" onsubmit="login(event)">
+            <h2>Login CRM</h2>
+            <input type="text" placeholder="Usuário" required>
+            <input type="password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <header>
+        <img src="https://idemais.com.br/wp-content/uploads/2022/12/shutterstock_1814767181-800x600.jpg" alt="Nossa Senhora">
+        <h1>Filhos de Maria</h1>
+    </header>
+
+    <div id="palavra" class="section">
+        <h2>Palavra do Dia</h2>
+        <p id="palavraTexto"></p>
+    </div>
+
+    <div id="musica" class="section">
+        <h2>Música para Meditação</h2>
+        <audio controls>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
+    <div id="videos" class="section">
+        <h2>Vídeos Inspiradores</h2>
+        <iframe src="https://www.youtube.com/embed?listType=playlist&list=PL37cljabwz5HWC2vSjHqzkXlj2jZIJqzj" allowfullscreen></iframe>
+        <a class="btn" href="https://www.youtube.com/@PodcastFilhosdeMaria" target="_blank">Ver mais no YouTube</a>
+    </div>
+
+    <div id="oracao" class="section">
+        <h2>Pedido de Oração</h2>
+        <form>
+            <textarea placeholder="Escreva seu pedido de oração..." required></textarea>
+            <button class="btn" type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <div id="stories" class="section">
+        <h2>Instagram</h2>
+        <iframe src="https://www.instagram.com/p/Chphtn2r6jJ/embed" frameborder="0" scrolling="no" allowtransparency="true" allow="encrypted-media"></iframe>
+        <a class="btn" href="https://www.instagram.com/filhosdemariacn/" target="_blank">Ver mais no Instagram</a>
+    </div>
+
+    <!-- CRM -->
+    <div id="crm" class="section">
+        <h2>Área Administrativa</h2>
+        <form id="cadastroForm">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
+            <label for="telefone">Telefone:</label>
+            <input type="tel" id="telefone" name="telefone" required>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="dataNascimento">Data de Nascimento:</label>
+            <input type="date" id="dataNascimento" name="dataNascimento" required>
+            <label for="grupoOracao">Grupo de Oração:</label>
+            <select id="grupoOracao" name="grupoOracao" required>
+                <option value="grupo1">Grupo 1</option>
+                <option value="grupo2">Grupo 2</option>
+                <option value="grupo3">Grupo 3</option>
+            </select>
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <h2>Lista de Participantes</h2>
+        <table id="tabelaParticipantes">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>E-mail</th>
+                    <th>Data de Nascimento</th>
+                    <th>Grupo de Oração</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dados serão preenchidos dinamicamente -->
+            </tbody>
+        </table>
+
+        <h2>Gestão de Doações</h2>
+        <form id="doacaoForm">
+            <label for="valorDoacao">Valor da Doação:</label>
+            <input type="number" id="valorDoacao" name="valorDoacao" required>
+            <label for="formaPagamento">Forma de Pagamento:</label>
+            <select id="formaPagamento" name="formaPagamento" required>
+                <option value="cartao">Cartão</option>
+                <option value="boleto">Boleto</option>
+                <option value="pix">Pix</option>
+            </select>
+            <button type="submit">Registrar Doação</button>
+        </form>
+
+        <h2>Aniversariantes do Dia</h2>
+        <ul id="listaAniversariantes" class="aniversariante">
+            <!-- Dados serão preenchidos dinamicamente -->
+        </ul>
+    </div>
+
+    <script>
+        // Funções JavaScript
+        function toggleMenu() {
+            document.getElementById('menu').classList.toggle('open');
+        }
+
+        // Login
+        function login(event) {
+            event.preventDefault();
+            const usuario = document.querySelector('#loginForm input[type="text"]').value;
+            const senha = document.querySelector('#loginForm input[type="password"]').value;
+
+            if (usuario === "admin" && senha === "admin") {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('crm').style.display = 'block';
+            } else {
+                alert('Usuário ou senha incorretos!');
+            }
+        }
+
+        // Mostrar login ao clicar em CRM no menu
+        document.querySelector('#menu a[href="#crmLink"]').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('login').style.display = 'flex';
+        });
+
+        // Palavra do Dia
+        const palavras = [
+            "Deus é o nosso refúgio e a nossa fortaleza.",
+            "Tudo posso naquele que me fortalece.",
+            "O Senhor é o meu pastor, nada me faltará."
+        ];
+        document.getElementById('palavraTexto').innerText = palavras[Math.floor(Math.random() * palavras.length)];
+
+        // CRM
+        function exibirAniversariantes() {
+            const participantes = JSON.parse(localStorage.getItem('participantes')) || [];
+            const hoje = new Date();
+            const aniversarioHoje = participantes.filter(participante => {
+                const dataNascimento = new Date(participante.dataNascimento);
+                return dataNascimento.getDate() === hoje.getDate() && dataNascimento.getMonth() === hoje.getMonth();
+            });
+            const listaAniversariantes = document.getElementById('listaAniversariantes');
+            listaAniversariantes.innerHTML = '';
+            aniversarioHoje.forEach(participante => {
+                const li = document.createElement('li');
+                li.textContent = `${participante.nome} - ${participante.telefone}`;
+                listaAniversariantes.appendChild(li);
+            });
+        }
+
+        document.getElementById('cadastroForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const email = document.getElementById('email').value;
+            const dataNascimento = document.getElementById('dataNascimento').value;
+            const grupoOracao = document.getElementById('grupoOracao').value;
+
+            const tabela = document.getElementById('tabelaParticipantes').getElementsByTagName('tbody')[0];
+            const newRow = tabela.insertRow();
+            newRow.innerHTML = `
+                <td>${nome}</td>
+                <td>${telefone}</td>
+                <td>${email}</td>
+                <td>${dataNascimento}</td>
+                <td>${grupoOracao}</td>
+            `;
+
+            const participantes = JSON.parse(localStorage.getItem('participantes')) || [];
+            participantes.push({ nome, telefone, email, dataNascimento, grupoOracao });
+            localStorage.setItem('participantes', JSON.stringify(participantes));
+
+            document.getElementById('cadastroForm').reset();
+            exibirAniversariantes();
+        });
+
+        document.getElementById('doacaoForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const valorDoacao = document.getElementById('valorDoacao').value;
+            const formaPagamento = document.getElementById('formaPagamento').value;
+            alert(`Doação de R$ ${valorDoacao} registrada via ${formaPagamento}.`);
+            document.getElementById('doacaoForm').reset();
+        });
+
+        window.onload = exibirAniversariantes;
+    </script>
+</body>
+</html>
