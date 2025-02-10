@@ -85,9 +85,18 @@
         #stories iframe {
             height: 700px;
         }
-        audio {
-            width: 100%;
-            margin-top: 10px;
+        .liturgia {
+            position: relative;
+        }
+        .liturgia button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -101,16 +110,36 @@
             <li><a href="#oracao">Pedido de Oração</a></li>
             <li><a href="#stories">Instagram</a></li>
             <li><a href="#crm">CRM</a></li>
+            <li><a href="#liturgia">Liturgia Diária</a></li>
         </ul>
     </div>
     <header>
         <img src="src/img/LogoFilhosDeMaria.png" alt="Nossa Senhora">
         <h1>Filhos de Maria</h1>
     </header>
+
+    <!-- Seção Palavra do Dia -->
     <div id="palavra" class="section">
         <h2>Palavra do Dia</h2>
-        <p id="palavraTexto"></p>
+        <p id="palavraTexto">Carregando...</p>
     </div>
+    
+    <div id="liturgia" class="section liturgia">
+        <h2>Liturgia Diária</h2>
+        <p id="liturgiaTexto">Carregando...</p>
+        <button onclick="toggleLiturgia()" id="toggleLiturgiaBtn">Minimizar</button>
+    
+        <!-- Leitor de áudio da liturgia -->
+        <div id="leitorAudio" style="display:none;">
+            <audio controls id="audioPlayer">
+                <source src="" id="audioSource" type="audio/mp3">
+                Seu navegador não suporta o elemento de áudio.
+            </audio>
+        </div>
+    </div>
+    
+    
+
     <div id="musica" class="section">
         <h2>PlayList Filhos de Maria</h2>
         <iframe style="border-radius:12px" 
@@ -121,18 +150,6 @@
             allowfullscreen="" 
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
         </iframe>
-    </div>
-
-    <!-- Seção Palavra do Dia -->
-    <div id="palavra" class="section">
-        <h2>Palavra do Dia</h2>
-        <p id="palavraTexto">Carregando...</p>
-    </div>
-
-    <!-- Seção Santo do Dia -->
-    <div id="santo" class="section">
-        <h2>Santo do Dia</h2>
-        <p id="santoTexto">Carregando...</p>
     </div>
 
     <div id="videos" class="section">
@@ -164,78 +181,131 @@
         <a class="btn" href="#">Acessar CRM</a>
     </div>
 
+    <div id="liturgia" class="section liturgia">
+        <h2>Liturgia Diária</h2>
+        <p id="liturgiaTexto">Carregando...</p>
+        <button onclick="toggleLiturgia()" id="toggleLiturgiaBtn">Minimizar</button>
+    </div>
+
     <script>
         function toggleMenu() {
             document.getElementById('menu').classList.toggle('open');
         }
+
         const palavras = [
             "Deus é o nosso refúgio e a nossa fortaleza.",
             "Tudo posso naquele que me fortalece.",
-            "O Senhor é o meu pastor, nada me faltará."
+            "O Senhor é o meu pastor, nada me faltará.",
+            "A paz de Cristo esteja sempre com você.",
+            "Amai-vos uns aos outros como eu vos amei.",
+            "A fé move montanhas.",
+            "A alegria do Senhor é a nossa força.",
+            "Caminha na luz do Senhor.",
+            "Aqueles que esperam no Senhor renovam suas forças.",
+            "A oração é a chave para a paz interior.",
+            "Seja forte e corajoso, o Senhor está contigo.",
+            "A confiança no Senhor traz paz ao coração.",
+            "Deus tem um plano para a sua vida.",
+            "Onde está o Espírito de Deus, ali há liberdade.",
+            "A oração transforma a alma.",
+            "Não temas, pois Deus é contigo.",
+            "Louvado seja Deus, agora e sempre.",
+            "Deus é amor, e quem vive no amor vive em Deus.",
+            "O Senhor é bom, a sua misericórdia dura para sempre.",
+            "A fé em Cristo é a nossa salvação.",
+            "Buscai o Reino de Deus e sua justiça, e tudo o mais será acrescentado.",
+            "Bendito seja Deus, que nos deu a vida.",
+            "A gratidão é a memória do coração.",
+            "O Senhor cuida de nós em todos os momentos.",
+            "Dai graças ao Senhor, porque Ele é bom.",
+            "Não andeis ansiosos por coisa alguma, mas em tudo, pela oração, apresentai a Deus as vossas petições.",
+            "O Senhor é meu pastor, nada me faltará.",
+            "Tudo o que pedirdes em oração, crede que recebereis, e assim será convosco.",
+            "O amor é paciente, o amor é bondoso.",
+            "Deus abençoe a sua vida com paz e alegria.",
+            "Onde houver fé, Deus agirá.",
+            "Que a luz de Cristo ilumine o seu caminho.",
+            "O Senhor é o nosso refúgio e fortaleza.",
+            "A esperança no Senhor nunca decepciona.",
+            "Deus é o nosso auxílio em tempos de aflição.",
+            "A confiança em Deus nos fortalece a cada dia.",
+            "A alegria do Senhor é a nossa força.",
+            "Que a paz de Cristo esteja em seu coração.",
+            "A misericórdia de Deus é infinita.",
+            "Deus é fiel, e sempre cumpre suas promessas."
         ];
-        document.getElementById('palavraTexto').innerText = palavras[Math.floor(Math.random() * palavras.length)];
-        function acenderVela() {
-            document.getElementById('velaStatus').innerText = "Sua vela estará acesa por 24 horas.";
-            setTimeout(() => {
-                document.getElementById('velaStatus').innerText = "Sua vela apagou. Reacenda se desejar.";
-            }, 86400000);
+
+        let palavraIndex = 0;
+
+        function mostrarPalavra() {
+            document.getElementById('palavraTexto').textContent = palavras[palavraIndex];
+            palavraIndex = (palavraIndex + 1) % palavras.length;
         }
 
-        // Função para buscar e exibir o RSS da Palavra do Dia
-        function carregarPalavraDoDia() {
-            const rssUrl = 'https://www.vaticannews.va/pt/palavra-do-dia.rss.xml';
-            const proxyUrl = 'https://api.allorigins.win/get?url='; // Usando um proxy para evitar CORS
-        
+        setInterval(mostrarPalavra, 5000); // Troca a palavra a cada 5 segundos
+
+        function acenderVela() {
+            const velaStatus = document.getElementById('velaStatus');
+            const agora = new Date();
+            const tempoLimite = new Date(agora.getTime() + 24 * 60 * 60 * 1000); // 24 horas
+            const horas = tempoLimite.getHours().toString().padStart(2, '0');
+            const minutos = tempoLimite.getMinutes().toString().padStart(2, '0');
+            velaStatus.textContent = `A vela foi acesa. Ela ficará acesa até ${horas}:${minutos}.`;
+        }
+
+        // Função para buscar e exibir o RSS da Liturgia Diária, incluindo o áudio
+        function carregarLiturgiaDoDia() {
+            const rssUrl = 'https://www.vaticannews.va/pt/palavra-do-dia.rss.xml'; // URL do RSS
+            const proxyUrl = 'https://api.allorigins.win/get?url='; // Proxy para evitar problemas de CORS
+
             fetch(proxyUrl + encodeURIComponent(rssUrl))
                 .then(response => response.json())
                 .then(data => {
                     const parser = new DOMParser();
                     const xmlDoc = parser.parseFromString(data.contents, 'text/xml');
-                    const item = xmlDoc.getElementsByTagName('item')[0];
+                    const item = xmlDoc.getElementsByTagName('item')[0]; // Pega o primeiro item
                     const title = item.getElementsByTagName('title')[0].textContent;
                     const description = item.getElementsByTagName('description')[0].textContent;
-                    
-                    // Exibe a Palavra do Dia no site
-                    document.getElementById('palavraTexto').innerHTML = `<strong>${title}</strong><br>${description}`;
+                    const audioUrl = item.getElementsByTagName('enclosure')[0]?.getAttribute('url'); // URL do áudio
+
+                    // Exibe o título e a descrição da Liturgia
+                    document.getElementById('liturgiaTexto').innerHTML = `<strong>${title}</strong><br>${description}`;
+
+                    // Se houver uma URL de áudio, exibe o player de áudio
+                    if (audioUrl) {
+                        document.getElementById('leitorAudio').style.display = 'block';
+                        document.getElementById('audioSource').setAttribute('src', audioUrl);
+                        document.getElementById('audioPlayer').load(); // Recarrega o player
+                    } else {
+                        document.getElementById('leitorAudio').style.display = 'none';
+                    }
                 })
                 .catch(error => {
-                    console.error('Erro ao carregar o feed:', error);
-                    document.getElementById('palavraTexto').innerText = 'Erro ao carregar a Palavra do Dia.';
+                    console.error('Erro ao carregar o feed da Liturgia:', error);
+                    document.getElementById('liturgiaTexto').innerText = 'Erro ao carregar a Liturgia Diária.';
                 });
         }
-        
-        // Chama a função para carregar a Palavra do Dia quando o site for carregado
-        window.onload = carregarPalavraDoDia;
-        
-        // Função para buscar e exibir o RSS do Santo do Dia
-        function carregarSantoDoDia() {
-            const rssUrl = 'https://www.vaticannews.va/pt.rss.xml';  // URL do feed RSS do Santo do Dia
-            const proxyUrl = 'https://api.allorigins.win/get?url='; // Usando um proxy para evitar CORS
-        
-            fetch(proxyUrl + encodeURIComponent(rssUrl))
-                .then(response => response.json())
-                .then(data => {
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(data.contents, 'text/xml');
-                    const item = xmlDoc.getElementsByTagName('item')[0];  // Pega o primeiro item (Santo do Dia)
-                    const title = item.getElementsByTagName('title')[0].textContent;
-                    const description = item.getElementsByTagName('description')[0].textContent;
-                    
-                    // Exibe o Santo do Dia no site
-                    document.getElementById('santoTexto').innerHTML = `<strong>${title}</strong><br>${description}`;
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar o feed:', error);
-                    document.getElementById('santoTexto').innerText = 'Erro ao carregar o Santo do Dia.';
-                });
+
+        // Função para alternar a visibilidade da Liturgia (minimizar/maximizar)
+        function toggleLiturgia() {
+            const liturgiaTexto = document.getElementById('liturgiaTexto');
+            const toggleBtn = document.getElementById('toggleLiturgiaBtn');
+            const liturgiaSection = document.getElementById('liturgia');
+            
+            if (liturgiaSection.classList.contains('minimized')) {
+                liturgiaTexto.style.display = 'block';
+                toggleBtn.textContent = 'Minimizar';
+                liturgiaSection.classList.remove('minimized');
+            } else {
+                liturgiaTexto.style.display = 'none';
+                toggleBtn.textContent = 'Maximizar';
+                liturgiaSection.classList.add('minimized');
+            }
         }
-        
-        // Chama a função para carregar o Santo do Dia quando o site for carregado
-        window.onload = function() {
-            carregarPalavraDoDia();  // Chama também a função da Palavra do Dia
-            carregarSantoDoDia();    // Chama a função do Santo do Dia
-        };
-        
+
+        // Chama a função para carregar a Liturgia Diária quando o site for carregado
+        window.onload = carregarLiturgiaDoDia;
+
     </script>
 </body>
 </html>
